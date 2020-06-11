@@ -1,6 +1,10 @@
 function [B] = compute_Bmat(c0, t_char, t_start, t_end)
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+% compute_Bmat: given a constant coupong coefficient (c0),
+% charateristic times (for sunrise/sunset) and a desired period
+% of time B matrix is generated
+
+% B matrix displays the delayed heating processes based on a particular
+% coupling with the environment
 
 t_char = t_char(t_char>t_start); %exclude sunsrise before pig placement
 t_char = [t_start, t_char]; % add start time
@@ -19,6 +23,7 @@ for col = 1:num_sec
         if t< t_char(col+1) && t>= t_char(col)
             B(row, col) = 1-exp(-c0*(t-t_char(col)));
         elseif t>t_char(col+1)
+            % below diag
             B(row, col) = exp(-c0*(t-t_char(col+1))) - exp(-c0*(t - t_char(col)));
         end
     end
